@@ -1,0 +1,6 @@
+flask
+werkzeug
+groq
+pandas
+scikit-learn
+PyPDF2
