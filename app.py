@@ -13,20 +13,54 @@ import random
 
 app = Flask(__name__, 
            template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
-app.secret_key = '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'  # Required for session
+app.secret_key = os.getenv('SECRET_KEY', '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')  # Required for session
 
 # Configure upload folder
-app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Create upload directory if it doesn't exist
-if not os.path.exists(app.config['UPLOAD_FOLDER']):
-    os.makedirs(app.config['UPLOAD_FOLDER'])
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 # Configure maximum file size (e.g., 16MB)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Initialize Groq Client
-client = Groq(api_key="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")
+client = Groq(api_key=os.getenv('GROQ_API_KEY', "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"))
+
+# Dictionary mapping resources to their official websites
+RESOURCE_WEBSITES = {
+    # Learning Platforms
+    'Codecademy': 'https://www.codecademy.com',
+    'Coursera': 'https://www.coursera.org',
+    'edX': 'https://www.edx.org',
+    'Udemy': 'https://www.udemy.com',
+    'freeCodeCamp': 'https://www.freecodecamp.org',
+    'Khan Academy': 'https://www.khanacademy.org',
+    'Pluralsight': 'https://www.pluralsight.com',
+    'DataCamp': 'https://www.datacamp.com',
+    'LeetCode': 'https://leetcode.com',
+    'HackerRank': 'https://www.hackerrank.com',
+    'GitHub': 'https://github.com',
+    'Stack Overflow': 'https://stackoverflow.com',
+    'W3Schools': 'https://www.w3schools.com',
+    'MDN Web Docs': 'https://developer.mozilla.org',
+    'Real Python': 'https://realpython.com',
+    'GeeksforGeeks': 'https://www.geeksforgeeks.org',
+    'TutorialsPoint': 'https://www.tutorialspoint.com',
+    
+    # Common Books (linking to their official pages or publisher sites)
+    'Python Crash Course': 'https://nostarch.com/pythoncrashcourse2e',
+    'Learning Python': 'https://www.oreilly.com/library/view/learning-python-5th/9781449355722/',
+    'Head First Python': 'https://www.oreilly.com/library/view/head-first-python/9781491919521/',
+    'Automate the Boring Stuff with Python': 'https://automatetheboringstuff.com',
+    'Django for Beginners': 'https://djangoforbeginners.com',
+    'Flask Web Development': 'https://www.oreilly.com/library/view/flask-web-development/9781491991725/',
+    'JavaScript: The Good Parts': 'https://www.oreilly.com/library/view/javascript-the-good/9780596517748/',
+    'Clean Code': 'https://www.pearson.com/store/p/clean-code-a-handbook-of-agile-software-craftsmanship/P100000701846',
+    'Design Patterns': 'https://www.pearson.com/store/p/design-patterns-elements-of-reusable-object-oriented-software/P100000701823'
+}
 
 def analyze_state(field, answers):
     state = {
@@ -123,39 +157,6 @@ def extract_text_from_pdf(file_path):
     except Exception as e:
         print(f"Error extracting text from PDF: {e}")
         return ""
-
-# Dictionary mapping resources to their official websites
-RESOURCE_WEBSITES = {
-    # Learning Platforms
-    'Codecademy': 'https://www.codecademy.com',
-    'Coursera': 'https://www.coursera.org',
-    'edX': 'https://www.edx.org',
-    'Udemy': 'https://www.udemy.com',
-    'freeCodeCamp': 'https://www.freecodecamp.org',
-    'Khan Academy': 'https://www.khanacademy.org',
-    'Pluralsight': 'https://www.pluralsight.com',
-    'DataCamp': 'https://www.datacamp.com',
-    'LeetCode': 'https://leetcode.com',
-    'HackerRank': 'https://www.hackerrank.com',
-    'GitHub': 'https://github.com',
-    'Stack Overflow': 'https://stackoverflow.com',
-    'W3Schools': 'https://www.w3schools.com',
-    'MDN Web Docs': 'https://developer.mozilla.org',
-    'Real Python': 'https://realpython.com',
-    'GeeksforGeeks': 'https://www.geeksforgeeks.org',
-    'TutorialsPoint': 'https://www.tutorialspoint.com',
-    
-    # Common Books (linking to their official pages or publisher sites)
-    'Python Crash Course': 'https://nostarch.com/pythoncrashcourse2e',
-    'Learning Python': 'https://www.oreilly.com/library/view/learning-python-5th/9781449355722/',
-    'Head First Python': 'https://www.oreilly.com/library/view/head-first-python/9781491919521/',
-    'Automate the Boring Stuff with Python': 'https://automatetheboringstuff.com',
-    'Django for Beginners': 'https://djangoforbeginners.com',
-    'Flask Web Development': 'https://www.oreilly.com/library/view/flask-web-development/9781491991725/',
-    'JavaScript: The Good Parts': 'https://www.oreilly.com/library/view/javascript-the-good/9780596517748/',
-    'Clean Code': 'https://www.pearson.com/store/p/clean-code-a-handbook-of-agile-software-craftsmanship/P100000701846',
-    'Design Patterns': 'https://www.pearson.com/store/p/design-patterns-elements-of-reusable-object-oriented-software/P100000701823'
-}
 
 def field_prompts(field):
     prompts = {
