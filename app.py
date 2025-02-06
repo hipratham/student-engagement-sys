@@ -31,12 +31,8 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Initialize Groq Client
-api_key = os.getenv('GROQ_API_KEY')
-if not api_key:
-    print("Warning: GROQ_API_KEY not set. Chat features will not work.")
-    client = None
-else:
-    client = groq.Groq(api_key=api_key)
+api_key = "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"
+client = groq.Groq(api_key=api_key)
 
 # Dictionary mapping resources to their official websites
 RESOURCE_WEBSITES = {
@@ -795,8 +791,6 @@ def index():
                 """
 
                 # Generate roadmap using Groq
-                if client is None:
-                    return render_template("index.html", error="GROQ_API_KEY not set. Chat features will not work.", questions=questions)
                 chat_completion = client.chat.completions.create(
                     messages=[
                         {
@@ -875,8 +869,6 @@ def chatbot():
             Make your responses visually appealing and easy to read."""
             
             # Create the chat completion with context
-            if client is None:
-                return jsonify({"error": "GROQ_API_KEY not set. Chat features will not work."})
             chat_completion = client.chat.completions.create(
                 messages=[
                     {
