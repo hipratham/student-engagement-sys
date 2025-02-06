@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, url_for, session, redirect
 from werkzeug.utils import secure_filename
-import groq
+from groq import Groq
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -10,10 +10,14 @@ import json
 import tempfile
 from datetime import datetime
 import random
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__, 
            template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
-app.secret_key = os.getenv('SECRET_KEY', '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')  # Required for session
+app.secret_key = os.getenv('SECRET_KEY', os.urandom(24).hex())
 
 # Configure upload folder
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
@@ -27,7 +31,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Initialize Groq Client
-client = groq.Client(api_key=os.getenv('GROQ_API_KEY', "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"))
+client = Groq(api_key=os.getenv('GROQ_API_KEY'))
 
 # Dictionary mapping resources to their official websites
 RESOURCE_WEBSITES = {
