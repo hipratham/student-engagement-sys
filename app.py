@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, url_for, session, redirect
 from werkzeug.utils import secure_filename
-from groq import Groq
+import groq
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -27,7 +27,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Initialize Groq Client
-client = Groq(api_key=os.getenv('GROQ_API_KEY', "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"))
+client = groq.Client(api_key=os.getenv('GROQ_API_KEY', "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"))
 
 # Dictionary mapping resources to their official websites
 RESOURCE_WEBSITES = {
