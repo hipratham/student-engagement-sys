@@ -31,7 +31,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Initialize Groq Client
-api_key = "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"
+api_key = "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"
 client = groq.Groq(api_key=api_key)
 
 # Dictionary mapping resources to their official websites
@@ -798,7 +798,7 @@ def index():
                             "content": complete_prompt
                         }
                     ],
-                    model="mixtral-8x7b-32768",
+                    model="llama-3.3-70b-versatile",
                     temperature=0.7,
                     max_tokens=4096,
                     top_p=1,
