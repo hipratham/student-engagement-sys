@@ -877,7 +877,7 @@ def chatbot():
                     },
                     *[{"role": msg["role"], "content": msg["content"]} for msg in chat_history]
                 ],
-                model="mixtral-8x7b-32768",
+                model="llama-3.3-70b-versatile",
                 temperature=0.7,
                 max_tokens=2048,
                 top_p=1,
